@@ -17,6 +17,10 @@
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <applicationicon>kgui-green.ico</applicationicon>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="FodyWeavers.xml" />
   </ItemGroup>

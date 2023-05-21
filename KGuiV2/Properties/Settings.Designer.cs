@@ -73,10 +73,22 @@ namespace KGuiV2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
-        public double RamtestTaskScope {
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public uint RamtestMegabytes {
             get {
-                return ((double)(this["RamtestTaskScope"]));
+                return ((uint)(this["RamtestMegabytes"]));
+            }
+            set {
+                this["RamtestMegabytes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
+        public uint RamtestTaskScope {
+            get {
+                return ((uint)(this["RamtestTaskScope"]));
             }
             set {
                 this["RamtestTaskScope"] = value;

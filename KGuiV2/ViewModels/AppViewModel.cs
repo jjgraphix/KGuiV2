@@ -52,6 +52,11 @@ namespace KGuiV2.ViewModels
         public uint RamtestThreads { get; set; } = (uint)(Environment.ProcessorCount / 2);
 
         /// <summary>
+        /// The task scope at which to stop testing.
+        /// </summary>
+        public uint RamtestTaskScope { get; set; } = 5000;
+
+        /// <summary>
         /// The cpu cache mode to use for the ramtest.
         /// </summary>
         public Ramtest.CpuCacheMode RamtestCpuCacheMode { get; set; } = Ramtest.CpuCacheMode.Enabled;
@@ -69,7 +74,7 @@ namespace KGuiV2.ViewModels
         /// <summary>
         /// The speed at which the ramtest is running.
         /// </summary>
-        public double RamtestSpeed => RamtestCoverage * (RamtestMegabytes / RamtestDuration.TotalSeconds);
+        public double RamtestSpeed { get; set; } = 0;
 
         /// <summary>
         /// The current ramtest test duration.
@@ -107,11 +112,6 @@ namespace KGuiV2.ViewModels
         public bool RamtestStopOnTaskScope { get; set; } = true;
 
         /// <summary>
-        /// The task scope at which to stop testing.
-        /// </summary>
-        public double RamtestTaskScope { get; set; } = 10000;
-
-        /// <summary>
         /// Indicates if the test should be stopped if an error is detected.
         /// </summary>
         public bool RamtestStopOnError { get; set; } = true;
@@ -145,6 +145,11 @@ namespace KGuiV2.ViewModels
         /// The total number of cpu threads.
         /// </summary>
         public uint SystemCpuThreads = (uint)Environment.ProcessorCount;
+
+        /// <summary>
+        /// Calculated test size from available memory.
+        /// </summary>
+        public uint AutoRamtestMegabytes { get; set; }
 
         /// <summary>
         /// Command for starting the ramtest.
@@ -190,6 +195,7 @@ namespace KGuiV2.ViewModels
         {
             Properties.Settings.Default.RamtestRngMode = (int)RamtestRngMode;
             Properties.Settings.Default.RamtestCpuCacheMode = (int)RamtestCpuCacheMode;
+            Properties.Settings.Default.RamtestMegabytes = RamtestMegabytes;
             Properties.Settings.Default.RamtestThreads = RamtestThreads;
             Properties.Settings.Default.RamtestStopOnError = RamtestStopOnError;
             Properties.Settings.Default.RamtestStopOnTaskScope = RamtestStopOnTaskScope;
@@ -206,6 +212,7 @@ namespace KGuiV2.ViewModels
         {
             RamtestRngMode = (Ramtest.RngMode)Properties.Settings.Default.RamtestRngMode;
             RamtestCpuCacheMode = (Ramtest.CpuCacheMode)Properties.Settings.Default.RamtestCpuCacheMode;
+            RamtestMegabytes = Properties.Settings.Default.RamtestMegabytes;
             RamtestThreads = Properties.Settings.Default.RamtestThreads;
             RamtestStopOnError = Properties.Settings.Default.RamtestStopOnError;
             RamtestStopOnTaskScope = Properties.Settings.Default.RamtestStopOnTaskScope;
@@ -276,6 +283,7 @@ namespace KGuiV2.ViewModels
                 RamtestErrorCount = Ramtest.GetErrorCount();
                 RamtestCoverage = Ramtest.GetCoverage();
                 RamtestDuration = TimeSpan.FromTicks(Stopwatch.GetTimestamp() - _ramtestStartTick);
+                RamtestSpeed = RamtestCoverage * (RamtestMegabytes / RamtestDuration.TotalSeconds);
 
                 if ((RamtestStopOnError && RamtestErrorCount > 0) || (RamtestStopOnTaskScope && RamtestTaskScope <= RamtestCoveragePercent))
                 {

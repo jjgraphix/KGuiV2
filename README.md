@@ -1,19 +1,30 @@
 # KGuiV2 (WIP)
-A custom gui for karhu ramtest with a few extras
+
+Modified gui for Karhu RAM Test originally created by RaINi_.
 
 ![preview](/.github/resources/preview.png)
 
-# Features
-* Configurable task scope to automatically stop the stresstest
-* Dedicated label for test speed
-* No Telemtrie
+# Change Notes - V2.1.2 (JJFX):
+- Custom app icon
+- Added minimize button
+- Fixed display of system memory
+- Fixed previous test size not saving
+- Fixed speed value and infinity error
+- Speed value locked when test is not active
+- Crude fix for start button not enabling at launch
+- Value formatting based on system region
+- Modified setting labels and formatting
 
 # TODO
-* Log
+- Calculate appropriate test size automatically
+- Add history log
 
 # Requirements
 * .NET 6
 
 # Installation
-* Build the project and put `vcomp140.dll` and `ramtest.dll` from karhu's `./x64/` directory into the directory of the exe you build
+* Download and install .NET 6 SDK (if needed)
+* Build project in cmd prompt from master directory: dotnet build KGuiV2.csproj
+* KGuiV2.exe will be compiled in the 'bin' directory under 'Debug'
+* Put 'vcomp140.dll' and 'ramtest.dll' from your Karhu's './x64/' directory into the new KGuiV2.exe directory
 * Run the program

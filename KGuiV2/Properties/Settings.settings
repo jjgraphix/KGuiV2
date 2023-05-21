@@ -14,8 +14,11 @@
     <Setting Name="RamtestStopOnTaskScope" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="RamtestTaskScope" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">10000</Value>
+    <Setting Name="RamtestTaskScope" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">5000</Value>
+    </Setting>
+    <Setting Name="RamtestMegabytes" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">1000</Value>
     </Setting>
     <Setting Name="RamtestThreads" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">1</Value>

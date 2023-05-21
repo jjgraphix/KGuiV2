@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace KGuiV2
 {
@@ -11,6 +12,9 @@ namespace KGuiV2
         /// Creates a new <see cref="MainWindow"/> instance.
         /// </summary>
         public MainWindow()
-            => InitializeComponent();
+        {
+            InitializeComponent();
+            TestSizeBox.Focus();
+        }
     }
 }
