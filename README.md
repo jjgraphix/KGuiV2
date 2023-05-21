@@ -2,7 +2,7 @@
 
 Modified gui for Karhu RAM Test originally created by RaINi_.
 
-![preview](/.github/resources/preview.png)
+![preview](/.github/resources/preview-212.png)
 
 # Change Notes - V2.1.2 (JJFX):
 - Custom app icon
