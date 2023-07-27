@@ -2,25 +2,17 @@
 
 Modified gui for Karhu RAM Test originally created by RaINi_.
 
-![preview](/.github/resources/preview-212.png)
+![preview](/.github/resources/preview2-220.png)
 
-# Change Notes - V2.1.2 (JJFX):
-- Custom app icon
-- Added minimize button
-- Fixed display of system memory
-- Fixed previous test size not saving
-- Fixed speed value and infinity error
-- Speed value locked when test is not active
-- Crude fix for start button not enabling at launch
-- Value formatting based on system region
-- Modified setting labels and formatting
+# Change Notes - V2.2.0 (JJFX):
+- Displays maximum recorded bandwidth (hover mouse for realtime reading)
+- Input validation
+- Fixed sizing and type issues
+- Removed history tab until finished
 
-# TODO
-- Calculate appropriate test size automatically
-- Add history log
-
-# Requirements
-* .NET 6
+# Requirements:
+* Karhu RAM Test
+* .NET 6 or higher
 
 # Installation
 * Download and install .NET 6 SDK (if needed)
@@ -28,3 +20,8 @@ Modified gui for Karhu RAM Test originally created by RaINi_.
 * KGuiV2.exe will be compiled in the 'bin' directory under 'Debug'
 * Put 'vcomp140.dll' and 'ramtest.dll' from your Karhu's './x64/' directory into the new KGuiV2.exe directory
 * Run the program
+
+# TODO:
+- Fix bug with start button not activating the first time
+- Options to auto-calculate test size and threads
+- Finish history feature

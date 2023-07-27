@@ -74,9 +74,9 @@ namespace KGuiV2.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1000")]
-        public uint RamtestMegabytes {
+        public uint? RamtestMegabytes {
             get {
-                return ((uint)(this["RamtestMegabytes"]));
+                return ((uint?)(this["RamtestMegabytes"]));
             }
             set {
                 this["RamtestMegabytes"] = value;
@@ -86,9 +86,9 @@ namespace KGuiV2.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("5000")]
-        public uint RamtestTaskScope {
+        public uint? RamtestTaskScope {
             get {
-                return ((uint)(this["RamtestTaskScope"]));
+                return ((uint?)(this["RamtestTaskScope"]));
             }
             set {
                 this["RamtestTaskScope"] = value;
@@ -98,9 +98,9 @@ namespace KGuiV2.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public uint RamtestThreads {
+        public uint? RamtestThreads {
             get {
-                return ((uint)(this["RamtestThreads"]));
+                return ((uint?)(this["RamtestThreads"]));
             }
             set {
                 this["RamtestThreads"] = value;

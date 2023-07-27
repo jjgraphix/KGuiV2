@@ -43,18 +43,21 @@ namespace KGuiV2.ViewModels
 
         /// <summary>
         /// The amount of system memory in megabytes to test.
+        /// Nullable for text field check.
         /// </summary>
-        public uint RamtestMegabytes { get; set; } = 1000;
+        public uint? RamtestMegabytes { get; set; } = 1000;
 
         /// <summary>
         /// The amount of threads to use for the test.
+        /// Nullable for text field check.
         /// </summary>
-        public uint RamtestThreads { get; set; } = (uint)(Environment.ProcessorCount / 2);
+        public uint? RamtestThreads { get; set; } = (uint)(Environment.ProcessorCount / 2);
 
         /// <summary>
         /// The task scope at which to stop testing.
+        /// Nullable for text field check.
         /// </summary>
-        public uint RamtestTaskScope { get; set; } = 5000;
+        public uint? RamtestTaskScope { get; set; } = 5000;
 
         /// <summary>
         /// The cpu cache mode to use for the ramtest.
@@ -75,6 +78,11 @@ namespace KGuiV2.ViewModels
         /// The speed at which the ramtest is running.
         /// </summary>
         public double RamtestSpeed { get; set; } = 0;
+
+        /// <summary>
+        /// The max recorded speed while ramtest is running.
+        /// </summary>
+        public double RamtestMaxSpeed { get; set; } = 0;
 
         /// <summary>
         /// The current ramtest test duration.
@@ -125,6 +133,11 @@ namespace KGuiV2.ViewModels
         /// The amount of ramtest errors.
         /// </summary>
         public uint RamtestErrorCount { get; set; }
+
+        /// <summary>
+        /// Enable task scope box if enabled and test is not running.
+        /// </summary>
+        public bool RamtestAllowTaskScope { get; set; }
 
         /// <summary>
         /// The total amount of system memory.
@@ -236,10 +249,11 @@ namespace KGuiV2.ViewModels
         /// <returns></returns>
         bool CanStartRamtest(object? param)
             => !RamtestIsRunning
-            && RamtestMegabytes >= 50
+            && RamtestMegabytes >= 1
             && RamtestMegabytes <= SystemMemoryFree
             && RamtestThreads > 0
-            && RamtestThreads <= SystemCpuThreads;
+            && RamtestThreads <= SystemCpuThreads
+            && !(RamtestStopOnTaskScope && RamtestTaskScope.GetValueOrDefault() <= 0);
 
         /// <summary>
         /// Stops the ramtest.
@@ -258,13 +272,16 @@ namespace KGuiV2.ViewModels
             Ramtest.SetCpuCache(RamtestCpuCacheMode);
             Ramtest.SetRng(RamtestRngMode);
 
-            var started = RamtestIsRunning = Ramtest.StartTest(RamtestMegabytes, RamtestThreads);
+            if (RamtestStopOnTaskScope && (RamtestTaskScope <= 0 || RamtestTaskScope.ToString() == ""))
+                RamtestStopOnTaskScope = false;
+
+            var started = RamtestIsRunning = Ramtest.StartTest(RamtestMegabytes.GetValueOrDefault(), RamtestThreads.GetValueOrDefault());
             if (started)
                 _ramtestStartTick = Stopwatch.GetTimestamp();
         }
 
         /// <summary>
-        /// The background updater method used for updating variales.
+        /// The background updater method used for updating variables.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -278,12 +295,24 @@ namespace KGuiV2.ViewModels
                 SystemMemoryFree = memoryStatusEx.AvailPhys / 1024 / 1024;
             }
 
+            if (RamtestMegabytes == null || RamtestMegabytes.ToString() == "")
+                RamtestMegabytes = 0;
+
+            if (RamtestThreads == null || RamtestThreads.ToString() == "")
+                RamtestThreads = 0;
+
+            if (RamtestTaskScope == null || RamtestTaskScope.ToString() == "")
+                RamtestTaskScope = 0;
+
+            RamtestAllowTaskScope = (RamtestStopOnTaskScope) ? !RamtestIsRunning : false;
+
             if (RamtestIsRunning)
             {
                 RamtestErrorCount = Ramtest.GetErrorCount();
                 RamtestCoverage = Ramtest.GetCoverage();
                 RamtestDuration = TimeSpan.FromTicks(Stopwatch.GetTimestamp() - _ramtestStartTick);
-                RamtestSpeed = RamtestCoverage * (RamtestMegabytes / RamtestDuration.TotalSeconds);
+                RamtestSpeed = RamtestCoverage * (RamtestMegabytes.GetValueOrDefault() / RamtestDuration.TotalSeconds);
+                RamtestMaxSpeed = Math.Max(RamtestSpeed,RamtestMaxSpeed);
 
                 if ((RamtestStopOnError && RamtestErrorCount > 0) || (RamtestStopOnTaskScope && RamtestTaskScope <= RamtestCoveragePercent))
                 {

@@ -8,8 +8,8 @@
         xmlns:local="clr-namespace:KGuiV2"
         xmlns:behaviors="clr-namespace:KGuiV2.Helpers.Behaviors"
         x:Name="AppWindow"
-        Height="420"
-        Width="268"
+        Height="425"
+        Width="270"
         ResizeMode="CanMinimize"
         Background="#FFF0F0F0"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
@@ -27,7 +27,7 @@
                         <Condition Binding="{Binding RamtestIsRunning, Mode=OneWay}" Value="True"/>
                         <Condition Binding="{Binding RamtestStopOnTaskScope, Mode=OneWay}" Value="True"/>
                     </MultiDataTrigger.Conditions>
-                    <Setter Property="Window.Title" Value="{Binding Path=RamtestFinishedIn, Mode=OneWay, StringFormat='Finish: {0:hh\\:mm\\:ss}', ConverterCulture={x:Static glob:CultureInfo.CurrentCulture}}"/>
+                    <Setter Property="Window.Title" Value="{Binding Path=RamtestFinishedIn, Mode=OneWay, StringFormat='ETR: {0:hh\\:mm\\:ss}', ConverterCulture={x:Static glob:CultureInfo.CurrentCulture}}"/>
                 </MultiDataTrigger>
             </Style.Triggers>
         </Style>
@@ -56,7 +56,17 @@
                         <DockPanel Margin="5,5,5,5">
                             <Grid DockPanel.Dock="Top" Margin="0,0,0,2">
                                 <TextBlock Text="Test Size (MB):" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <TextBox x:Name="TestSizeBox" Width="70" HorizontalAlignment="Right" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Text="{Binding RamtestMegabytes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding RamtestIsRunning, Converter={StaticResource InverseBooleanConverter}}">
+                                <TextBox x:Name="TestSizeBox" Width="70" HorizontalAlignment="Right" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" IsEnabled="{Binding RamtestIsRunning, Converter={StaticResource InverseBooleanConverter}}">
+                                    <FrameworkElement.Style>
+                                        <Style TargetType="{x:Type TextBox}">
+                                            <Setter Property="Text" Value="{Binding RamtestMegabytes, Mode=TwoWay, TargetNullValue='', UpdateSourceTrigger=PropertyChanged}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RamtestMegabytes, Mode=OneWay, Converter={StaticResource IsGreaterThanConverter}, ConverterParameter=0}" Value="False">
+                                                    <Setter Property="Control.Background" Value="LightPink"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </FrameworkElement.Style>
                                     <i:Interaction.Behaviors>
                                         <behaviors:NumericTextBoxBehavior/>
                                     </i:Interaction.Behaviors>
@@ -64,14 +74,24 @@
                             </Grid>
                             <Grid DockPanel.Dock="Top" Margin="0,0,0,2">
                                 <TextBlock Text="CPU Threads:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <TextBox Width="70" HorizontalAlignment="Right" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Text="{Binding RamtestThreads, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding RamtestIsRunning, Converter={StaticResource InverseBooleanConverter}}">
+                                <TextBox Width="70" HorizontalAlignment="Right" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" IsEnabled="{Binding RamtestIsRunning, Converter={StaticResource InverseBooleanConverter}}">
+                                    <FrameworkElement.Style>
+                                        <Style TargetType="{x:Type TextBox}">
+                                            <Setter Property="Text" Value="{Binding RamtestThreads, Mode=TwoWay, TargetNullValue='', UpdateSourceTrigger=PropertyChanged}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Text}" Value="0">
+                                                    <Setter Property="Control.Background" Value="LightPink"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </FrameworkElement.Style>
                                     <i:Interaction.Behaviors>
                                         <behaviors:NumericTextBoxBehavior/>
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </Grid>
                             <Grid DockPanel.Dock="Top" Margin="0,0,0,5">
-                                <TextBlock Text="Test Scope (MB):" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <TextBlock Text="Test Scope (%):" HorizontalAlignment="Left" VerticalAlignment="Center">
                                     <FrameworkElement.Style>
                                         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                                             <Setter Property="Control.Foreground" Value="Gray"/>
@@ -83,13 +103,13 @@
                                         </Style>
                                     </FrameworkElement.Style>
                                 </TextBlock>
-                                <TextBox Width="70" HorizontalAlignment="Right" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Text="{Binding RamtestTaskScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding RamtestIsRunning, Converter={StaticResource InverseBooleanConverter}}">
+                                <TextBox x:Name="TaskScope" Width="70" HorizontalAlignment="Right" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" IsEnabled="{Binding RamtestAllowTaskScope}">
                                     <FrameworkElement.Style>
-                                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                            <Setter Property="Control.Foreground" Value="Gray"/>
+                                        <Style TargetType="{x:Type TextBox}">
+                                            <Setter Property="Text" Value="{Binding RamtestTaskScope, Mode=TwoWay, TargetNullValue='', UpdateSourceTrigger=PropertyChanged}"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding RamtestStopOnTaskScope, Mode=OneWay}" Value="True">
-                                                    <Setter Property="Control.Foreground" Value="Black"/>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Text}" Value="0">
+                                                    <Setter Property="Control.Background" Value="LightPink"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -99,17 +119,17 @@
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </Grid>
-                            <CheckBox DockPanel.Dock="Top" Content="Stop on Error" IsChecked="{Binding RamtestStopOnError, Mode=TwoWay}" IsEnabled="{Binding RamtestIsRunning, Converter={StaticResource InverseBooleanConverter}}"/>
+                            <CheckBox DockPanel.Dock="Top" Margin="0,0,0,1" Content="Stop on Error" IsChecked="{Binding RamtestStopOnError, Mode=TwoWay}" IsEnabled="{Binding RamtestIsRunning, Converter={StaticResource InverseBooleanConverter}}"/>
                             <CheckBox DockPanel.Dock="Top" Content="Stop on Test Scope" IsChecked="{Binding RamtestStopOnTaskScope, Mode=TwoWay}" IsEnabled="{Binding RamtestIsRunning, Converter={StaticResource InverseBooleanConverter}}"/>
                         </DockPanel>
                     </GroupBox>
                     <GroupBox DockPanel.Dock="Top" Header="Status" HorizontalAlignment="Stretch" Margin="5,0,5,0">
                         <DockPanel Margin="5,5,5,5">
-                            <Grid DockPanel.Dock="Top">
+                            <Grid DockPanel.Dock="Top" Margin="0,0,0,1">
                                 <TextBlock Text="Duration:" HorizontalAlignment="Left"/>
                                 <TextBlock HorizontalAlignment="Right" Text="{Binding RamtestDuration, Mode=OneWay, StringFormat='d\\:hh\\:mm\\:ss', ConverterCulture={x:Static glob:CultureInfo.CurrentCulture}}"/>
                             </Grid>
-                            <Grid DockPanel.Dock="Top">
+                            <Grid DockPanel.Dock="Top" Margin="0,0,0,1">
                                 <TextBlock Text="Coverage:" HorizontalAlignment="Left"/>
                                 <TextBlock HorizontalAlignment="Right" Text="{Binding RamtestCoverage, Mode=OneWay, StringFormat={}{0:#######0 %}, ConverterCulture={x:Static glob:CultureInfo.CurrentCulture}}">
                                     <FrameworkElement.ToolTip>
@@ -136,7 +156,7 @@
                                   </FrameworkElement.ToolTip>
                                 </TextBlock>
                             </Grid>
-                            <Grid DockPanel.Dock="Top">
+                            <Grid DockPanel.Dock="Top" Margin="0,0,0,1">
                                 <TextBlock Text="Error Count:" HorizontalAlignment="Left"/>
                                 <TextBlock HorizontalAlignment="Right" Text="{Binding RamtestErrorCount, Mode=OneWay}">
                                     <FrameworkElement.Style>
@@ -151,19 +171,39 @@
                                     </FrameworkElement.Style>
                                 </TextBlock>
                             </Grid>
-                            <Grid DockPanel.Dock="Top">
-                                <TextBlock Text="Speed:" HorizontalAlignment="Left"/>
-                                <TextBlock HorizontalAlignment="Right" Text="{Binding RamtestSpeed, Mode=OneWay, StringFormat='{}{0:N3} MB/s', ConverterCulture={x:Static glob:CultureInfo.CurrentCulture}}">
+                            <Grid DockPanel.Dock="Top" Margin="0,0,0,1">
+                                <TextBlock Text="Max Speed:" HorizontalAlignment="Left"/>
+                                <TextBlock HorizontalAlignment="Right">
                                     <FrameworkElement.Style>
                                         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Text" Value="0 MB/s"/>
                                             <Setter Property="Control.Foreground" Value="Gray"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding RamtestIsRunning, Mode=OneWay}" Value="True">
                                                     <Setter Property="Control.Foreground" Value="Black"/>
                                                 </DataTrigger>
+                                                <DataTrigger Binding="{Binding RamtestMaxSpeed, Mode=OneWay, Converter={StaticResource IsGreaterThanConverter}, ConverterParameter=0}" Value="True">
+                                                    <Setter Property="Text" Value="{Binding RamtestMaxSpeed, Mode=OneWay, StringFormat='{}{0:N3} MB/s', ConverterCulture={x:Static glob:CultureInfo.CurrentCulture}}"/>
+                                                </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </FrameworkElement.Style>
+                                    <FrameworkElement.ToolTip>
+                                        <ToolTip>
+                                            <FrameworkElement.Style>
+                                                <Style TargetType="{x:Type ToolTip}">
+                                                <Setter Property="UIElement.Visibility" Value="Hidden"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RamtestIsRunning, Mode=OneWay}" Value="True">
+                                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                                </Style>
+                                            </FrameworkElement.Style>
+                                            <TextBlock Text="{Binding RamtestSpeed, Mode=OneWay, StringFormat='{}{0:N3} MB/s', ConverterCulture={x:Static glob:CultureInfo.CurrentCulture}}">
+                                            </TextBlock>
+                                        </ToolTip>
+                                  </FrameworkElement.ToolTip>
                                 </TextBlock>
                             </Grid>
                         </DockPanel>
@@ -173,10 +213,12 @@
                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                                 <Setter Property="ContentControl.Content" Value="Start"/>
                                 <Setter Property="Command" Value="{Binding RamtestStartCommand}"/>
+                                <Setter Property="IsDefault" Value="False"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding RamtestIsRunning, Mode=TwoWay}" Value="True">
                                         <Setter Property="ContentControl.Content" Value="Stop"/>
                                         <Setter Property="Command" Value="{Binding RamtestStopCommand}"/>
+                                        <Setter Property="IsDefault" Value="False"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -211,9 +253,6 @@
                         </DockPanel>
                     </GroupBox>
                 </DockPanel>
-            </TabItem>
-            <TabItem Header="History" IsEnabled="False">
-                <Grid/>
             </TabItem>
         </TabControl>
     </Grid>
