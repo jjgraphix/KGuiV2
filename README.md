@@ -2,7 +2,7 @@
 
 Modified gui for Karhu RAM Test originally created by RaINi_.
 
-![preview](/.github/resources/preview2-220.png)
+![preview](/.github/resources/preview2-220.PNG)
 
 # Change Notes - V2.2.0 (JJFX):
 - Displays maximum recorded bandwidth (hover mouse for realtime reading)
