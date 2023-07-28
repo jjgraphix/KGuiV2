@@ -156,7 +156,7 @@
                                   </FrameworkElement.ToolTip>
                                 </TextBlock>
                             </Grid>
-                            <Grid DockPanel.Dock="Top" Margin="0,0,0,1">
+                            <Grid DockPanel.Dock="Top" Margin="0,0,0,4">
                                 <TextBlock Text="Error Count:" HorizontalAlignment="Left"/>
                                 <TextBlock HorizontalAlignment="Right" Text="{Binding RamtestErrorCount, Mode=OneWay}">
                                     <FrameworkElement.Style>
@@ -172,6 +172,25 @@
                                 </TextBlock>
                             </Grid>
                             <Grid DockPanel.Dock="Top" Margin="0,0,0,1">
+                                <TextBlock Text="Test Speed:" HorizontalAlignment="Left"/>
+                                <TextBlock HorizontalAlignment="Right">
+                                    <FrameworkElement.Style>
+                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Text" Value="0 MB/s"/>
+                                            <Setter Property="Control.Foreground" Value="Gray"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RamtestIsRunning, Mode=OneWay}" Value="True">
+                                                    <Setter Property="Control.Foreground" Value="Black"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding RamtestSpeed, Mode=OneWay, Converter={StaticResource IsGreaterThanConverter}, ConverterParameter=0}" Value="True">
+                                                    <Setter Property="Text" Value="{Binding RamtestSpeed, Mode=OneWay, StringFormat='{}{0:N3} MB/s', ConverterCulture={x:Static glob:CultureInfo.CurrentCulture}}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </FrameworkElement.Style>
+                                </TextBlock>
+                            </Grid>
+                            <Grid DockPanel.Dock="Top" Margin="0,0,0,0">
                                 <TextBlock Text="Max Speed:" HorizontalAlignment="Left"/>
                                 <TextBlock HorizontalAlignment="Right">
                                     <FrameworkElement.Style>
@@ -188,22 +207,6 @@
                                             </Style.Triggers>
                                         </Style>
                                     </FrameworkElement.Style>
-                                    <FrameworkElement.ToolTip>
-                                        <ToolTip>
-                                            <FrameworkElement.Style>
-                                                <Style TargetType="{x:Type ToolTip}">
-                                                <Setter Property="UIElement.Visibility" Value="Hidden"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding RamtestIsRunning, Mode=OneWay}" Value="True">
-                                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                                </Style>
-                                            </FrameworkElement.Style>
-                                            <TextBlock Text="{Binding RamtestSpeed, Mode=OneWay, StringFormat='{}{0:N3} MB/s', ConverterCulture={x:Static glob:CultureInfo.CurrentCulture}}">
-                                            </TextBlock>
-                                        </ToolTip>
-                                  </FrameworkElement.ToolTip>
                                 </TextBlock>
                             </Grid>
                         </DockPanel>

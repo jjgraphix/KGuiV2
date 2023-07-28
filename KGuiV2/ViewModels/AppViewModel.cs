@@ -275,6 +275,8 @@ namespace KGuiV2.ViewModels
             if (RamtestStopOnTaskScope && (RamtestTaskScope <= 0 || RamtestTaskScope.ToString() == ""))
                 RamtestStopOnTaskScope = false;
 
+            RamtestMaxSpeed = 0;
+
             var started = RamtestIsRunning = Ramtest.StartTest(RamtestMegabytes.GetValueOrDefault(), RamtestThreads.GetValueOrDefault());
             if (started)
                 _ramtestStartTick = Stopwatch.GetTimestamp();
@@ -312,7 +314,9 @@ namespace KGuiV2.ViewModels
                 RamtestCoverage = Ramtest.GetCoverage();
                 RamtestDuration = TimeSpan.FromTicks(Stopwatch.GetTimestamp() - _ramtestStartTick);
                 RamtestSpeed = RamtestCoverage * (RamtestMegabytes.GetValueOrDefault() / RamtestDuration.TotalSeconds);
-                RamtestMaxSpeed = Math.Max(RamtestSpeed,RamtestMaxSpeed);
+
+                if (RamtestCoveragePercent > 10)
+                    RamtestMaxSpeed = Math.Max(RamtestSpeed,RamtestMaxSpeed);
 
                 if ((RamtestStopOnError && RamtestErrorCount > 0) || (RamtestStopOnTaskScope && RamtestTaskScope <= RamtestCoveragePercent))
                 {
