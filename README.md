@@ -1,5 +1,7 @@
 # KGuiV2 (WIP)
 
+**This project has been replaced by [KGuiX](https://github.com/jjgraphix/KGuiX)**
+
 Modified gui for Karhu RAM Test originally created by RaINi_.
 
 ![preview](/.github/resources/preview2-220.PNG)
